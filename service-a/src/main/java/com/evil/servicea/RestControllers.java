@@ -13,7 +13,7 @@ import static org.springframework.http.HttpMethod.GET;
 @RequiredArgsConstructor
 public class RestControllers {
 
-    @Value("${destination.service..url}")
+    @Value("${destination.service.url}")
     private String url;
 
     private final RestTemplate restTemplate;
