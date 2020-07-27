@@ -1,16 +1,18 @@
 package com.evil.servicec;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @SpringBootApplication
-@RequestMapping
+@RestController
 public class Application {
 
-    @Value("${latency:30}")
+    @Value("${latency:30000}")
     private int latency;
 
     public static void main(String[] args) {
@@ -18,8 +20,9 @@ public class Application {
     }
 
     @RequestMapping
-    public String index(@RequestHeader String payload) throws InterruptedException {
+    public String index() throws InterruptedException {
+        log.info("Receive message");
         Thread.sleep(latency);
-        return payload;
+        return "I'm so slow";
     }
 }
