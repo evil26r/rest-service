@@ -2,28 +2,29 @@ package com.evil.serviceb;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import static org.springframework.http.HttpMethod.GET;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class RestControllers {
 
-
-    @Value("${destination.service.url}")
-    private String url;
-
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
 
     @RequestMapping
-    public String index() {
+    public Mono<String> index() {
         log.info("Receive message");
-        return restTemplate.exchange(url, GET, HttpEntity.EMPTY, String.class).getBody();
+        return webClient.get().retrieve().bodyToMono(String.class);
+    }
+
+
+    @RequestMapping("request/{id}")
+    public Mono<String> index(@PathVariable int id) {
+        log.info("Receive message");
+        return webClient.get().uri("/request/" + id).retrieve().bodyToMono(String.class);
     }
 }
